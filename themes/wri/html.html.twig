@@ -1,0 +1,117 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ *
+ * @ingroup themeable
+ */
+#}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+  <head>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-1706823-43"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'UA-1706823-43');
+	</script>
+    <head-placeholder token="{{ placeholder_token }}">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      {% if social_image.field_type.value  %}
+        <meta property="og:type" content="{{ social_image.field_type.value }}" />
+      {% else %}
+        <meta property="og:type" content="article" />
+      {% endif %}
+      {% if social_image.field_title.value  %}
+        <meta property="og:title" content="{{ social_image.field_title.value }}" />
+        <meta name="twitter:title" content="{{ social_image.field_title.value }}" />
+      {% endif %}
+      {% if social_image.field_description.value %}
+        <meta property="og:description" content="{{ social_image.field_description.value }}" />
+        <meta name="twitter:description" content="{{ social_image.field_description.value }}" />
+        <meta itemprop="description" content="{{ social_image.field_description.value }}" />
+      {% endif %}
+      <meta property="og:image" content="{{ base_url ~ file_url(social_image.field_image.entity.fileuri) }}" />
+      <meta name="twitter:image:src" content="{{ base_url ~ file_url(social_image.field_image.entity.fileuri) }}" />
+      <meta itemprop="image" content="{{ base_url ~ file_url(social_image.field_image.entity.fileuri) }}" />
+      {% if social_image.field_url.value %}
+        <meta property="og:url" content="{{ social_image.field_url.value }}" />
+      {% endif %}
+      <meta name="twitter:card" content="summary_large_image">
+      <meta property="og:site_name" content="WRI ROSS PRIZE" />
+      <meta name="twitter:site" content="WRI ROSS PRIZE" />
+      <meta itemprop="name" content="WRI ROSS PRIZE" />
+      <link rel="apple-touch-icon-precomposed" href="/themes/wri/images/apple-touch-icon-152x152.png">
+      <link rel="icon" href="/themes/wri/images/favicon-96x96.png">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+    <script type="text/javascript">Raven.config('https://88aa605b09334024a460ca5f33996f25@sentry.io/1235425').install();</script>
+    <script src="/themes/wri/js/jquery.min.js"></script>
+  </head>
+  <body{{ attributes }}>
+    {#
+      Keyboard navigation/accessibility link to main content section in
+      page.html.twig.
+    #}
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+
+    {% if page.popup %}
+      {{ page.popup }}
+    {% endif %}
+
+    {{ attach_library('wri/global-styling') }}
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+    <script>
+        jQuery(document).ready(function($) {
+          $('.owl-carousel').owlCarousel({
+            loop: true,
+            margin: 0,
+            nav: true,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 7000,
+            autoplayHoverPause: true,
+            responsive:{
+              0:{
+                items: 1
+              },
+              768:{
+                items: 3
+              },
+              992:{
+                items: 3
+              }
+            }
+          })
+        });
+      </script>
+
+  </body>
+</html>

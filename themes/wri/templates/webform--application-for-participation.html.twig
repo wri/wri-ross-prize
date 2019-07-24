@@ -1,0 +1,93 @@
+{#
+/**
+ * @file
+ * Theme implementation for a 'webform' element.
+ *
+ * This is an copy of the webform.html.twig theme_wrapper which includes the
+ * 'title_prefix' and 'title_suffix' variables needed for
+ * contextual links to appear.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the webform.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_webform()
+ * @see _webform_form_after_build()
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="popup-application" style="display:none;">
+    <div class="close"></div>
+    <form{{ attributes }}>
+        <div class="left">
+            <ul class="popup-application__nav">
+                <li class="active">
+                    <a href="#edit-application-information" class="tab-link" data-tab="1">
+                        <span>BASIC</span> INFORMATION</a>
+                </li>
+                <li>
+                    <a href="#edit-eligibility-criteria" class="tab-link" data-tab="2">
+                        <span>IMPACT</span></a>
+                </li>
+                <li>
+                    <a href="#edit-selection-progress" class="tab-link" data-tab="3">
+                        <span>PRIMARY</span> CONTACT</a>
+                </li>
+                <li>
+                    <a href="#edit-assessment-criteria" class="tab-link" data-tab="4">
+                        <span>ADDITIONAL</span> INFORMATION</a>
+                </li>
+            </ul>
+            <p><a href="#" class="guide-modal">GUIDE TO APPLICATION</a></p>
+        </div>
+
+        <div class="scroll">
+            <div class="text1">
+                <div class="note-warning">
+                    Please fill out all required fields on each page
+                </div>
+                {{ children }}
+            </div>
+        </div>
+        <div class="popup-application__steps">
+            <div class="step-1">
+                <a href="#edit-eligibility-criteria" class="start full-width step-link" data-tab="2">
+                    Next
+                </a>
+            </div>
+            <div class="step-2">
+                <a href="#edit-application-information" class="prev step-link" data-tab="1">
+                    Previous
+                </a>
+                <a href="#edit-selection-progress" class="next step-link" data-tab="3">
+                    Next
+                </a>
+            </div>
+            <div class="step-3">
+                <a href="#edit-eligibility-criteria" class="prev step-link" data-tab="2">
+                    Previous
+                </a>
+                <a href="#edit-assessment-criteria" class="next step-link" data-tab="4">
+                    Next
+                </a>
+            </div>
+            <div class="step-4">
+                <a href="#edit-selection-progress" class="prev step-link" data-tab="3">
+                    Previous
+                </a>
+                <a href="#" id="app-submit" class="start submit-form disabled">
+                    Submit Application
+                </a>
+            </div>
+        </div>
+    </form>
+    <div class="app-success">
+        <h2>Thank you!</h2>
+        <p>Your data was submitted.</p>
+    </div>
+</div>

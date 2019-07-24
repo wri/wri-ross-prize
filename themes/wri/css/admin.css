@@ -1,0 +1,188 @@
+.contextual-region {
+    position: static !important;
+}
+
+.admin .photos .item:nth-child(6) {
+    margin: -40px 90px 0 45px;
+}
+.admin .photos .item:nth-child(7) {
+    margin: 105px 90px 0 0;
+}
+.admin .photos .item:nth-child(8) {
+    margin: 220px 0 0 0;
+}
+.admin .photos .item:nth-child(9) {
+    margin: -175px 0 0 45px;
+}
+.admin .photos .item:nth-child(10) {
+    margin: -25px 0 0 90px;
+}
+.admin .photos .item:nth-child(11) {
+    margin: 127px 0 0 85px;
+}
+.admin .photos .item:nth-child(12) {
+    margin: -200px 0 0 45px;
+}
+.admin .photos .item:nth-child(13) {
+    margin: -80px 0 0 85px;
+}
+.admin .photos .item:nth-child(14) {
+    margin: 80px 0 0 85px;
+}
+.admin .photos .item:nth-child(15) {
+    margin: -225px 0 0 45px;
+}
+
+.admin .news .item:nth-child(4) {
+    width: 675px;
+    margin-right: 44px;
+}
+
+.admin .news .item:nth-child(5), .admin .news .item:nth-child(6) {
+    width: 360px;
+}
+
+.admin .people .img:nth-child(5) {
+    display: block;
+    margin: -77px 350px 2px 270px;
+}
+
+.admin .people .img:nth-child(7) {
+    margin-right: 530px;
+}
+.admin .people .img:nth-child(8) {
+    float: left;
+    margin-left: 270px;
+}
+
+@media (max-width: 1090px) {
+    .admin .photos .item:nth-child(6) {
+        margin-top: 20px;
+        margin-right: 25px;
+    }
+    .admin .photos .item:nth-child(7) {
+        margin-right: 25px;
+    }
+    .admin .photos .item:nth-child(8) {
+        position: relative;
+        z-index: 5;
+    }
+    .admin .photos .item:nth-child(10), .admin .photos .item:nth-child(11) {
+        margin-left: 20px;
+    }
+    .admin .photos .item:nth-child(12) {
+        margin-left: 40px;
+    }
+    .admin .photos .item:nth-child(13) {
+        margin-left: 20px;
+    }
+    .admin .photos .item:nth-child(14) {
+        margin-left: 20px;
+    }
+
+    .admin .news .item:nth-child(4) .title {
+        font-size: 30px;
+        line-height: 1;
+    }
+    .admin .news .item:nth-child(4) {
+        width: 520px;
+        margin-right: 15px;
+    }
+    .admin .news .item:nth-child(5), .admin .news .item:nth-child(6) {
+        width: 250px;
+    }
+
+    .admin .people .img:nth-child(5), .admin .people .img:nth-child(8) {
+        margin-left: 200px;
+    }
+
+    .admin .people .img:nth-child(7) {
+        margin-right: 400px;
+    }
+}
+
+@media (max-width: 960px) {
+    .admin .photos .item:nth-child(6) {
+        margin-left: 10px;
+        margin-right: 15px;
+    }
+    .admin .photos .item:nth-child(8) {
+        margin-top: -50px;
+        margin-left: 10px;
+    }
+    .admin .photos .item:nth-child(9) {
+        margin-top: 50px;
+    }
+    .admin .photos .item:nth-child(10) {
+        margin-top: -50px;
+        float: left;
+    }
+    .admin .photos .item:nth-child(11) {
+        margin-top: 30px;
+    }
+    .admin .photos .item:nth-child(12) {
+        margin-top: 10px;
+        margin-left: 40px;
+    }
+    .admin .photos .item:nth-child(13) {
+        margin-top: -270px;
+        float: right;
+    }
+}
+
+@media (max-width: 800px) {
+    .admin .news .item:nth-child(4) {
+        width: 100%;
+        margin-right: 0;
+    }
+    .admin .news .item:nth-child(5) {
+        width: 240px;
+        margin-right: 20px;
+    }
+    .admin .news .item:nth-child(6) {
+        width: 240px;
+    }
+
+    .admin .people .img:nth-child(5) {
+        margin-top: 300px;
+        margin-left: 250px;
+    }
+    .admin .people .img:nth-child(6), .admin .people .img:nth-child(8) {
+        margin-left: 50px;
+    }
+    .admin .people .img:nth-child(7) {
+        margin-right: 0;
+    }
+    .admin .people .img:nth-child(2n + 10) {
+        margin-left: 50px;
+    }
+
+    .admin .people .img:nth-child(2n + 7) {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 500px) {
+    .admin .news .item:nth-child(4) .title {
+        font-size: 22px;
+    }
+    .admin .news .item:nth-child(5), .admin .news .item:nth-child(6) {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .admin .people .img:nth-child(5) {
+        margin-top: 320px;
+        margin-left: 50px;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin .photos .item:nth-child(6), .admin .photos .item:nth-child(7), .admin .photos .item:nth-child(8), .admin .photos .item:nth-child(9),
+    .admin .photos .item:nth-child(10), .admin .photos .item:nth-child(11), .admin .photos .item:nth-child(12), .admin .photos .item:nth-child(13),
+    .admin .photos .item:nth-child(14) {
+        margin: 20px auto;
+        float: none;
+        width: 271px;
+    }
+}

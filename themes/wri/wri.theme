@@ -1,0 +1,175 @@
+<?php
+
+function get_winner(&$vars, $pdf = false)
+{
+    $nid = \Drupal::entityQuery('node')
+        ->condition('status', 1)
+        ->condition('field_winner.value', 1)
+        ->condition('type', 'finalists')
+        ->execute();
+
+    if (!empty($nid)) {
+        $vars['winner'] = \Drupal\node\Entity\Node::load(current($nid));
+    }
+
+    if ($pdf === true) {
+        $nid = \Drupal::entityQuery('node')
+            ->condition('status', 1)
+            ->condition('title', 'Winner')
+            ->condition('type', 'pdf')
+            ->execute();
+
+        if (!empty($nid)) {
+            $vars['winner_pdf'] = \Drupal\node\Entity\Node::load(current($nid));
+        }
+    }
+}
+
+function wri_preprocess_html(&$vars)
+{
+    $vars['base_url'] = $GLOBALS['base_url'];
+    if ($block = \Drupal\block_content\Entity\BlockContent::load(11)) {
+        $vars['social_image'] = $block;
+    }
+}
+
+function wri_preprocess_page(&$vars)
+{
+    $type = '';
+    if ($node = \Drupal::routeMatch()->getParameter('node')) {
+        $type = $node->bundle();
+    }
+
+    if ($type != 'finalists') {
+        $block = \Drupal\block_content\Entity\BlockContent::load(12);
+        $block_view = \Drupal::entityTypeManager()->getViewBuilder('block_content')->view($block);
+        $vars['head_date'] = $block_view;
+
+        $block = \Drupal\block_content\Entity\BlockContent::load(14);
+        $block_view = \Drupal::entityTypeManager()->getViewBuilder('block_content')->view($block);
+        $vars['decided_block'] = $block_view;
+        $vars['decided_block_label'] = $block->label();
+
+        get_winner($vars);
+
+        $res = [];
+        $nids = \Drupal::entityQuery('node')->condition('status', 1)->condition('type', 'map')->execute();
+        $projects_count = 0;
+        if (isset($nids)) {
+            $nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+            foreach ($nodes as $node) {
+                $projects = [];
+                foreach ($node->get('field_projects')->getValue() as $project) {
+                    $projects_count++;
+                    $projects[] = $project['value'];
+                }
+
+                $count = count($projects);
+                if ($count < 3) {
+                    $marker = '/themes/wri/images/marker1.svg';
+                } elseif ($count > 2 && $count < 5) {
+                    $marker = '/themes/wri/images/marker2.svg';
+                } elseif ($count > 4 && $count < 8) {
+                    $marker = '/themes/wri/images/marker3.svg';
+                } else {
+                    $marker = '/themes/wri/images/marker4.svg';
+                }
+
+                $res[] = [
+                    'position' => ['lat' => (float)$node->get('field_lat')->getString(), 'lng' => (float)$node->get('field_lng')->getString()],
+                    'city' => $node->title->getString(),
+                    'city_short' => $node->title->getString(),
+                    'country' => $node->get('field_country')->getString(),
+                    'country_code' => $node->get('field_country_code')->getString(),
+                    'icon' => $marker,
+                    'zIndex' => 9999,
+                    'projects' => $projects,
+                ];
+            }
+        }
+
+        $vars['projects_count'] = $projects_count;
+
+        $nids = \Drupal::entityQuery('node')->condition('status', 1)->condition('type', 'finalists')->execute();
+        if (isset($nids)) {
+            $nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+            foreach ($nodes as $node) {
+                $lat = (float)$node->get('field_lat')->getString();
+                $lng = (float)$node->get('field_lng')->getString();
+                if ($lat && $lng) {
+                    $res[] = [
+                        'id' => $node->id(),
+                        'position' => ['lat' => $lat, 'lng' => $lng],
+                        'title' => $node->title->getString(),
+                        'sub_title' => $node->get('field_sub_title')->getString(),
+                        'place' => $node->get('field_place')->getString(),
+                        'image' => file_create_url($node->field_image->entity->getFileUri()),
+                        'icon' => [
+                            'url' => !empty($vars['winner']) && $vars['winner']->id() == $node->id()
+                                ? '/themes/wri/images/group_winner_12.svg'
+                                : '/themes/wri/images/group_12.svg',
+                            'anchor' => [0, 46],
+                        ],
+                        'zIndex' => 99999,
+                    ];
+                }
+            }
+        }
+
+        $vars['map'] = $res;
+    }
+}
+
+function wri_preprocess_block(&$vars)
+{
+    $vars['test'] = $vars['attributes']['id'];
+    if (isset($vars['attributes']['id'])) {
+        if ($vars['attributes']['id'] == 'block-views-block-finalists-block-1') {
+            $view = \Drupal\views\Views::getView('finalists');
+            if (is_object($view)) {
+                $view->execute('block_1');
+                foreach ($view->result as $id => $row) {
+                    $vars['finalists_nodes'][$id] = $row->_entity;
+                }
+            }
+        } elseif ($vars['attributes']['id'] == 'block-haveyouhelped') {
+            get_winner($vars, true);
+        }
+    }
+}
+
+/**
+ * @param $suggestions
+ * @param array $variables
+ */
+function wri_theme_suggestions_input_alter(&$suggestions, array $variables)
+{
+    $element = $variables['element'];
+
+    if (isset($element['#attributes']['data-twig-suggestion'])) {
+        $suggestions[] = 'input__' . $element['#type'] . '__' . $element['#attributes']['data-twig-suggestion'];
+    }
+}
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function wri_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+{
+    if ($form['#id'] == 'webform-submission-contact-us-node-6-add-form') {
+        $form['actions']['submit']['#attributes']['data-twig-suggestion'] = 'contact_submit';
+    }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function wri_theme_suggestions_page_alter(array &$suggestions, array $vars)
+{
+    if ($node = \Drupal::routeMatch()->getParameter('node')) {
+        $content_type = $node->bundle();
+        $suggestions[] = $vars['theme_hook_original'] . '__' . $content_type;
+    }
+}

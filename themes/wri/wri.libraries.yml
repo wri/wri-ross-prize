@@ -1,0 +1,16 @@
+global-styling:
+  css:
+    theme:
+      css/jquery-ui.css: {}
+      css/styles.css: {}
+      css/admin.css: {}
+      css/map.css: {}
+      css/owl.carousel.min.css: {}
+  js:
+    js/jquery-ui.js: {}
+    js/index.js: {}
+    js/jquery.nicescroll.min.js: {}
+    js/owl.carousel.js: {}
+    js/svgxuse.js: {}
+  dependecies:
+     - core/jquery

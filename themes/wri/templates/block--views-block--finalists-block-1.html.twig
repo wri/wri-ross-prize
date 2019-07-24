@@ -1,0 +1,118 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main content
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ *
+ * @ingroup themeable
+ */
+#}
+{#{ title_prefix }}
+{% if label %}
+  <h2{{ title_attributes }}>{{ label }}</h2>
+{% endif %}
+{{ title_suffix }#}
+
+{% block content %}
+  <div class="finalists__container">
+    <div class="finalists__row row_reverced">
+      <div class="finalists__heading">
+        <div class="finalists__header">
+          <h3 class="finalists__h3 finalists__header_bold">5 FINALISTS</h3>
+          <h3 class="finalists__h3 finalists__header_thin">SELECTED</h3>
+        </div>
+
+        <div class="finalists__header-link">
+          <a href="#" class="decided">HOW WE DECIDED</a>
+          <span class="finalists__arrow"></span>
+        </div>
+      </div>
+
+      <div class="finalists__card finalists__card-reverced" data-id="{{ finalists_nodes[0].id }}" data-hash="{{ finalists_nodes[0].label|replace({' ':''}) }}">
+        <div class="finalists__card-info">
+          <div class="finalists__card-heading">
+            <h4 class="finalists__card-header">{{ finalists_nodes[0].label == 'SARSAI' ?  '2019 Winner' : finalists_nodes[0].label }}</h4>
+            <div class="finalists__card-subheader">{{ finalists_nodes[0].label == 'SARSAI' ?  'SARSAI <br>' : '' }}{{ finalists_nodes[0].field_sub_title[0].value }}</div>
+          </div>
+          <div class="finalists__card-place-from">{{ finalists_nodes[0].field_place[0].value }}</div>
+        </div>
+        <div class="finalists__card-image">
+          {% if finalists_nodes[0].field_video[0].value %}
+            <img src="{{ file_url(finalists_nodes[0].field_image[0].entity.fileuri) }}" />
+            <span class="play"></span>
+          {% else %}
+            <img src="{{ file_url(finalists_nodes[0].field_image[0].entity.fileuri) }}" />
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% for row in finalists_nodes[1:]|batch(2) %}
+      <div class="finalists__row {{ loop.index == 2 ? 'row__half-column' : '' }}">
+        {% set index = loop.index %}
+        {% for item in row %}
+          {% if index == 2 and loop.index == 1 %}
+            <div class="finalists__card finalists__card__column" data-id="{{ item.id }}" data-hash="{{ item.label|replace({' ':''}) }}">
+              <div class="finalists__card-info finalists__card-info_column">
+                <div class="finalists__card-heading">
+                  <h4 class="finalists__card-header">{{ item.label }}</h4>
+                  <div class="finalists__card-subheader">{{ item.field_sub_title[0].value }}</div>
+                </div>
+                <div class="finalists__card-place-from">{{ item.field_place[0].value }}</div>
+              </div>
+
+              <div class="finalists__card-image">
+                {% if item.field_video[0].value %}
+                  <img src="{{ file_url(item.field_image[0].entity.fileuri) }}" />
+                  <span class="play"></span>
+                {% else %}
+                  <img src="{{ file_url(item.field_image[0].entity.fileuri) }}" />
+                {% endif %}
+              </div>
+            </div>
+          {% else %}
+            <div class="finalists__card" data-id="{{ item.id }}" data-hash="{{ item.label|replace({' ':''}) }}">
+              <div class="finalists__card-info">
+                <div class="finalists__card-heading">
+                  <h4 class="finalists__card-header">{{ item.label }}</h4>
+                  <div class="finalists__card-subheader">{{ item.field_sub_title[0].value }}</div>
+                </div>
+                <div class="finalists__card-place-from">{{ item.field_place[0].value }}</div>
+              </div>
+              <div class="finalists__card-image">
+                {% if item.field_video[0].value %}
+                  <img src="{{ file_url(item.field_image[0].entity.fileuri) }}" />
+                  <span class="play"></span>
+                {% else %}
+                  <img src="{{ file_url(item.field_image[0].entity.fileuri) }}" />
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
